@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 import {
 	Box,
@@ -24,6 +25,7 @@ import {
 
 import EditableComponent from './EditableComponent'
 import type { Campaign, Session } from './util'
+import { useRefreshOnSoftNav } from '@/hooks'
 
 type CampaignViewProps = {
 	campaign: Campaign
@@ -32,8 +34,9 @@ type CampaignViewProps = {
 export default function CampaignView({
 	campaign: campaignOriginal,
 }: CampaignViewProps) {
+	const router = useRouter()
 	const [campaign, setCampaign] = useState(campaignOriginal)
-	const [hasSaved, setHasSaved] = useState(false)
+	useRefreshOnSoftNav(`/campaigns/${campaign.name}`)
 
 	// auto save any changes
 	useEffect(() => {
@@ -42,14 +45,16 @@ export default function CampaignView({
 		}
 
 		void (async () => {
-			setHasSaved(true)
 			await fetch(`/campaigns/${campaignOriginal.name}/api`, {
 				method: 'PUT',
 				body: JSON.stringify(campaign),
 			})
-			campaignOriginal.name = campaign.name
+			if (campaignOriginal.name !== campaign.name) {
+				campaignOriginal.name = campaign.name
+				router.replace(`/campaigns/${campaign.name}`)
+			}
 		})()
-	}, [campaign, campaignOriginal])
+	}, [campaign, campaignOriginal, router])
 
 	return (
 		<Container maxWidth="lg">
@@ -67,10 +72,7 @@ export default function CampaignView({
 					}}
 				>
 					<Breadcrumbs>
-						{/** @ts-ignore prefetch prop, a workaround to bust the cache after saving */}
-						<Button href="/" prefetch={!hasSaved}>
-							Main
-						</Button>
+						<Button href="/">Main</Button>
 						<Typography>{campaign.name}</Typography>
 					</Breadcrumbs>
 					<Box sx={{ mx: 'auto' }}>

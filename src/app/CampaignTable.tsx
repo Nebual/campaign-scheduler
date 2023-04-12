@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import {
 	Box,
 	Breadcrumbs,
@@ -18,12 +19,15 @@ import {
 } from '@mui/material'
 
 import { Campaign } from './campaigns/[campaign]/util'
+import { useRefreshOnSoftNav } from '@/hooks'
 
 type CampaignTableProps = {
 	rows: Campaign[]
 }
 
 export default function CampaignTable({ rows }: CampaignTableProps) {
+	useRefreshOnSoftNav('/')
+
 	return (
 		<Container maxWidth="lg">
 			<Box

@@ -25,7 +25,6 @@ export default function SessionView({
 	session: sessionOriginal,
 }: SessionViewProps) {
 	const [session, setSession] = useState(sessionOriginal)
-	const [hasSaved, setHasSaved] = useState(false)
 
 	// auto save any changes
 	useEffect(() => {
@@ -34,7 +33,6 @@ export default function SessionView({
 		}
 
 		void (async () => {
-			setHasSaved(true)
 			await fetch(
 				`/campaigns/${session.campaign}/sessions/${sessionOriginal.date}/api`,
 				{
@@ -62,15 +60,8 @@ export default function SessionView({
 					}}
 				>
 					<Breadcrumbs>
-						{/** @ts-ignore prefetch prop, a workaround to bust the cache after saving */}
-						<Button href="/" prefetch={!hasSaved}>
-							Main
-						</Button>
-						{/** @ts-ignore prefetch prop, a workaround to bust the cache after saving */}
-						<Button
-							href={`/campaigns/${session.campaign}`}
-							prefetch={!hasSaved}
-						>
+						<Button href="/">Main</Button>
+						<Button href={`/campaigns/${session.campaign}`}>
 							{session.campaign}
 						</Button>
 						<Typography>{session.date}</Typography>

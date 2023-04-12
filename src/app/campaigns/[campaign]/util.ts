@@ -7,9 +7,21 @@ export async function readCampaigns(): Promise<Campaign[]> {
 }
 
 // todo: this is a hilariously bad 'database'
-export async function writeCampaigns(rows: Campaign[]) {
+export async function writeCampaigns(campaigns: Campaign[]) {
 	await mkdir('./data', { recursive: true })
-	await writeFile('./data/campaigns.json', JSON.stringify(rows, null, 2))
+	campaigns = campaigns.map((campaign: Campaign) => ({
+		...campaign,
+		sessions: campaign.sessions
+			.map((session: Session) => ({
+				...session,
+				campaign: campaign.name, // always save latest name
+			}))
+			.sort(
+				(a: Session, b: Session) =>
+					new Date(b.date).getTime() - new Date(a.date).getTime()
+			),
+	}))
+	await writeFile('./data/campaigns.json', JSON.stringify(campaigns, null, 2))
 }
 
 export type Session = {
