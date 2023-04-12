@@ -1,7 +1,10 @@
-import { NextResponse } from 'next/server'
-import { readCampaigns, writeCampaigns } from './util'
+import { NextRequest, NextResponse } from 'next/server'
+import { readCampaigns, writeCampaigns } from '../util'
 
-export async function PUT(request, { params: { campaign } }) {
+export async function PUT(
+	request: NextRequest,
+	{ params: { campaign } }: { params: { campaign: string } }
+) {
 	const rows = await readCampaigns()
 	const index = rows.findIndex((row) => row.name === campaign)
 	const updatedRow = await request.json()

@@ -1,27 +1,29 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import {
+	Box,
+	Breadcrumbs,
+	Button,
+	Container,
+	Link,
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Tooltip,
+	Typography,
+} from '@mui/material'
 
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import Button from '@mui/material/Button'
+import { Campaign } from './campaigns/[campaign]/util'
 
 type CampaignTableProps = {
-	rows: { name: string; people: string[] }[]
+	rows: Campaign[]
 }
 
 export default function CampaignTable({ rows }: CampaignTableProps) {
-	const router = useRouter()
-	const [isFetching, setIsFetching] = useState(false)
 	return (
 		<Container maxWidth="lg">
 			<Box
@@ -33,71 +35,73 @@ export default function CampaignTable({ rows }: CampaignTableProps) {
 					alignItems: 'center',
 				}}
 			>
-				<Typography variant="h4" component="h1" gutterBottom>
-					Campaigns
-				</Typography>
+				<Box
+					sx={{
+						display: 'flex',
+						width: '100%',
+					}}
+				>
+					<Breadcrumbs>
+						<Tooltip title="Game Planning Manager: Gmanman's cooler brother">
+							<Typography>GPlanMan</Typography>
+						</Tooltip>
+					</Breadcrumbs>
+					<Typography
+						variant="h4"
+						component="h1"
+						gutterBottom
+						sx={{ mx: 'auto' }}
+					>
+						Campaigns
+					</Typography>
+					<Button href="/campaigns/new">New</Button>
+				</Box>
+
 				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650 }}>
+					<Table sx={{ minWidth: 450 }}>
 						<TableHead>
 							<TableRow>
 								<TableCell>Name</TableCell>
 								<TableCell>People</TableCell>
+								<TableCell>Last Session</TableCell>
 								<TableCell>{/*Actions*/}</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{rows.map((row) => (
-								<TableRow
-									key={row.name}
-									sx={{
-										'&:last-child td, &:last-child th': {
-											border: 0,
-										},
-									}}
-								>
-									<TableCell component="th" scope="row">
-										{row.name}
-									</TableCell>
-									<TableCell>
-										{row.people.map((person) => (
-											<Typography
-												key={`${row.name}.${person}`}
-											>
-												{person}
-											</Typography>
-										))}
-									</TableCell>
-									<TableCell align="right">
-										<Button
-											onClick={async () => {
-												setIsFetching(true)
-												await fetch(
-													`/campaigns/${row.name}`,
-													{
-														method: 'PUT',
-														body: JSON.stringify({
-															...row,
-															people: [
-																...row.people,
-																'test',
-															],
-														}),
-													}
-												)
-												setIsFetching(false)
-												router.refresh()
-											}}
-											disabled={isFetching}
-										>
-											Test
-										</Button>
-									</TableCell>
-								</TableRow>
+								<CampaignRow key={row.name} row={row} />
 							))}
 						</TableBody>
 					</Table>
 				</TableContainer>
 			</Box>
 		</Container>
+	)
+}
+
+type CampaignRowProps = {
+	row: Campaign
+}
+
+function CampaignRow({ row }: CampaignRowProps) {
+	return (
+		<TableRow
+			sx={{
+				'&:last-child td, &:last-child th': {
+					border: 0,
+				},
+			}}
+		>
+			<TableCell component="th" scope="row">
+				{row.name}
+			</TableCell>
+			<TableCell>{row.people.join(', ')}</TableCell>
+			<TableCell>
+				{row.sessions?.length ? row.sessions[0].date : ''}
+			</TableCell>
+			<TableCell align="right">
+				<Link href={`/campaigns/${row.name}`}>Edit</Link>
+			</TableCell>
+		</TableRow>
 	)
 }
