@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 
 import TextField from '@mui/material/TextField'
 import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -12,20 +12,22 @@ export default function DateTimePicker({
 	value: string
 	setValue: (value: string) => void
 }) {
-	const [fieldValue, setFieldValue] = useState(() => dayjs(value))
-
+	const fieldValueRef = useRef(dayjs(value))
 	function onDateAccept() {
 		setValue(
-			fieldValue.set('second', 0).set('millisecond', 0).toISOString()
+			fieldValueRef.current
+				.set('second', 0)
+				.set('millisecond', 0)
+				.toISOString()
 		)
 	}
 
 	return (
 		<MuiDateTimePicker
-			value={fieldValue}
+			value={fieldValueRef.current}
 			onChange={(newValue) => {
 				if (newValue) {
-					setFieldValue(newValue)
+					fieldValueRef.current = newValue
 				}
 			}}
 			onAccept={onDateAccept}
@@ -42,6 +44,7 @@ export default function DateTimePicker({
 							}
 						}}
 						sx={{
+							...params.sx,
 							'& fieldset': { border: 'none' },
 							'&': { maxWidth: '14rem' }, // probably a bad idea, but why is there all that whitespace?
 						}}

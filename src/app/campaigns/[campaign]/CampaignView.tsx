@@ -36,26 +36,27 @@ export default function CampaignView({
 	campaign: campaignOriginal,
 }: CampaignViewProps) {
 	const router = useRouter()
+	const [campaignSaved, setCampaignSaved] = useState(campaignOriginal)
 	const [campaign, setCampaign] = useState(campaignOriginal)
 	useRefreshOnSoftNav(`/campaigns/${campaign.name}`)
 
 	// auto save any changes
 	useEffect(() => {
-		if (JSON.stringify(campaign) === JSON.stringify(campaignOriginal)) {
+		if (JSON.stringify(campaign) === JSON.stringify(campaignSaved)) {
 			return
 		}
 
 		void (async () => {
-			await fetch(`/campaigns/${campaignOriginal.name}/api`, {
+			await fetch(`/campaigns/${campaignSaved.name}/api`, {
 				method: 'PUT',
 				body: JSON.stringify(campaign),
 			})
-			if (campaignOriginal.name !== campaign.name) {
-				campaignOriginal.name = campaign.name
+			if (campaignSaved.name !== campaign.name) {
 				router.replace(`/campaigns/${campaign.name}`)
 			}
+			setCampaignSaved(campaign)
 		})()
-	}, [campaign, campaignOriginal, router])
+	}, [campaign, campaignSaved, router])
 
 	return (
 		<Container maxWidth="lg">
