@@ -8,15 +8,15 @@ import {
 	Button,
 	Card,
 	CardContent,
-	Chip,
 	Container,
 	TextField,
 	Typography,
 } from '@mui/material'
 
-import type { Session } from '@/campaignDb'
+import type { Session } from '@/types'
 import DateTimePicker from '@/DateTimePicker'
 import { dateStringFormat } from '@/util'
+import UserChip from '@/UserChip'
 
 type SessionViewProps = {
 	session: Session
@@ -91,17 +91,16 @@ export default function SessionView({
 							People
 						</Typography>
 						<div>
-							{session.people.map((person) => (
-								<Chip
-									key={`session.${person}`}
-									label={person}
-									variant="outlined"
+							{session.people.map((user) => (
+								<UserChip
+									key={`session.${user.id}`}
+									user={user}
 									sx={{ mr: 1, mt: 1 }}
 									onDelete={() => {
 										setSession((session) => ({
 											...session,
 											people: session.people.filter(
-												(p) => p !== person
+												(p) => p.id !== user.id
 											),
 										}))
 									}}
@@ -118,8 +117,11 @@ export default function SessionView({
 										...session,
 										people: [
 											...session.people,
-											(e.target as HTMLInputElement)
-												.value,
+											{
+												id: (
+													e.target as HTMLInputElement
+												).value,
+											},
 										],
 									}))
 									;(e.target as HTMLInputElement).value = ''

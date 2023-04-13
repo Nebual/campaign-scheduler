@@ -9,7 +9,6 @@ import {
 	Button,
 	Card,
 	CardContent,
-	Chip,
 	Container,
 	Link,
 	Paper,
@@ -24,9 +23,10 @@ import {
 } from '@mui/material'
 
 import EditableComponent from './EditableComponent'
-import type { Campaign, Session } from '@/campaignDb'
+import type { Campaign, Session } from '@/types'
 import { useRefreshOnSoftNav } from '@/hooks'
 import { dateStringFormat } from '@/util'
+import UserChip from '@/UserChip'
 
 type CampaignViewProps = {
 	campaign: Campaign
@@ -106,17 +106,16 @@ export default function CampaignView({
 							People
 						</Typography>
 						<div>
-							{campaign.people.map((person) => (
-								<Chip
-									key={`${campaign.name}.${person}`}
-									label={person}
-									variant="outlined"
+							{campaign.people.map((user) => (
+								<UserChip
+									key={`${campaign.name}.${user.id}`}
+									user={user}
 									sx={{ mr: 1, mt: 1 }}
 									onDelete={() => {
 										setCampaign((campaign) => ({
 											...campaign,
 											people: campaign.people.filter(
-												(p) => p !== person
+												(p) => p.id !== user.id
 											),
 										}))
 									}}
@@ -133,8 +132,11 @@ export default function CampaignView({
 										...campaign,
 										people: [
 											...campaign.people,
-											(e.target as HTMLInputElement)
-												.value,
+											{
+												id: (
+													e.target as HTMLInputElement
+												).value,
+											},
 										],
 									}))
 									;(e.target as HTMLInputElement).value = ''
@@ -184,12 +186,8 @@ function SessionRow({ session }: SessionRowProps) {
 				{dateStringFormat(session.date)}
 			</TableCell>
 			<TableCell>
-				{session.people.map((person) => (
-					<Chip
-						key={`${session.date}.${person}`}
-						label={person}
-						variant="outlined"
-					/>
+				{session.people.map((user) => (
+					<UserChip key={`${session.date}.${user.id}`} user={user} />
 				))}
 			</TableCell>
 			<TableCell align="right">

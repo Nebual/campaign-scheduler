@@ -18,7 +18,7 @@ import {
 	Typography,
 } from '@mui/material'
 
-import { Campaign } from '@/campaignDb'
+import { Campaign } from '@/types'
 import { useRefreshOnSoftNav } from '@/hooks'
 import { dateStringFormat } from '@/util'
 
@@ -100,7 +100,7 @@ function CampaignRow({ row }: CampaignRowProps) {
 			<TableCell component="th" scope="row">
 				{row.name}
 			</TableCell>
-			<TableCell>{row.people.join(', ')}</TableCell>
+			<TableCell>{row.people.map(({ id }) => id).join(', ')}</TableCell>
 			<TableCell>
 				{row.sessions?.length
 					? dateStringFormat(row.sessions[0].date)
