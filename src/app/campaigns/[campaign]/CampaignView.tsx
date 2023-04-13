@@ -24,8 +24,9 @@ import {
 } from '@mui/material'
 
 import EditableComponent from './EditableComponent'
-import type { Campaign, Session } from './util'
+import type { Campaign, Session } from '@/campaignDb'
 import { useRefreshOnSoftNav } from '@/hooks'
+import { dateStringFormat } from '@/util'
 
 type CampaignViewProps = {
 	campaign: Campaign
@@ -180,7 +181,7 @@ function SessionRow({ session }: SessionRowProps) {
 			}}
 		>
 			<TableCell component="th" scope="row">
-				{session.date}
+				{dateStringFormat(session.date)}
 			</TableCell>
 			<TableCell>
 				{session.people.map((person) => (
@@ -193,7 +194,7 @@ function SessionRow({ session }: SessionRowProps) {
 			</TableCell>
 			<TableCell align="right">
 				<Link
-					href={`/campaigns/${session.campaign}/sessions/${session.date}`}
+					href={`/campaigns/${session.campaign}/sessions/${session.id}`}
 				>
 					Edit
 				</Link>

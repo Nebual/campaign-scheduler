@@ -14,8 +14,9 @@ import {
 	Typography,
 } from '@mui/material'
 
-import type { Session } from '../../util'
-import EditableComponent from '../../EditableComponent'
+import type { Session } from '@/campaignDb'
+import DateTimePicker from '@/DateTimePicker'
+import { dateStringFormat } from '@/util'
 
 type SessionViewProps = {
 	session: Session
@@ -24,25 +25,26 @@ type SessionViewProps = {
 export default function SessionView({
 	session: sessionOriginal,
 }: SessionViewProps) {
+	const [savedSession, setSavedSession] = useState(sessionOriginal)
 	const [session, setSession] = useState(sessionOriginal)
 
 	// auto save any changes
 	useEffect(() => {
-		if (JSON.stringify(session) === JSON.stringify(sessionOriginal)) {
+		if (JSON.stringify(session) === JSON.stringify(savedSession)) {
 			return
 		}
 
 		void (async () => {
 			await fetch(
-				`/campaigns/${session.campaign}/sessions/${sessionOriginal.date}/api`,
+				`/campaigns/${session.campaign}/sessions/${session.id}/api`,
 				{
 					method: 'PUT',
 					body: JSON.stringify(session),
 				}
 			)
-			sessionOriginal.date = session.date
+			setSavedSession(session)
 		})()
-	}, [session, sessionOriginal])
+	}, [session, savedSession])
 
 	return (
 		<Container maxWidth="lg">
@@ -64,12 +66,14 @@ export default function SessionView({
 						<Button href={`/campaigns/${session.campaign}`}>
 							{session.campaign}
 						</Button>
-						<Typography>{session.date}</Typography>
+						<Typography>
+							{dateStringFormat(session.date)}
+						</Typography>
 					</Breadcrumbs>
 					<Box sx={{ mx: 'auto' }}>
 						<Typography variant="h4" component="h1" gutterBottom>
 							{session.campaign} -{' '}
-							<EditableComponent
+							<DateTimePicker
 								value={session.date}
 								setValue={(val) =>
 									setSession((session) => ({
@@ -77,7 +81,6 @@ export default function SessionView({
 										date: val,
 									}))
 								}
-								normalComponent={session.date}
 							/>
 						</Typography>
 					</Box>

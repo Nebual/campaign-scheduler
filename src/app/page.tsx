@@ -2,7 +2,7 @@
 import React from 'react'
 
 import CampaignTable from './CampaignTable'
-import { readCampaigns } from './campaigns/[campaign]/util'
+import { readCampaigns } from '@/campaignDb'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

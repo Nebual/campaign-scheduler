@@ -18,8 +18,9 @@ import {
 	Typography,
 } from '@mui/material'
 
-import { Campaign } from './campaigns/[campaign]/util'
+import { Campaign } from '@/campaignDb'
 import { useRefreshOnSoftNav } from '@/hooks'
+import { dateStringFormat } from '@/util'
 
 type CampaignTableProps = {
 	rows: Campaign[]
@@ -101,7 +102,9 @@ function CampaignRow({ row }: CampaignRowProps) {
 			</TableCell>
 			<TableCell>{row.people.join(', ')}</TableCell>
 			<TableCell>
-				{row.sessions?.length ? row.sessions[0].date : ''}
+				{row.sessions?.length
+					? dateStringFormat(row.sessions[0].date)
+					: ''}
 			</TableCell>
 			<TableCell align="right">
 				<Link href={`/campaigns/${row.name}`}>Edit</Link>

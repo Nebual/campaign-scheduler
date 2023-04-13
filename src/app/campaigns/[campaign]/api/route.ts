@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readCampaigns, writeCampaigns } from '../util'
+import { readCampaigns, writeCampaigns } from '@/campaignDb'
 
 export async function PUT(
 	request: NextRequest,

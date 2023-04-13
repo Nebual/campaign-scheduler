@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readCampaigns, writeCampaigns } from '../../../util'
+import { readCampaigns, writeCampaigns } from '@/campaignDb'
 
 export async function PUT(
 	request: NextRequest,
@@ -11,7 +11,7 @@ export async function PUT(
 		return NextResponse.error()
 	}
 
-	const index = campaignData.sessions.findIndex((row) => row.date === id)
+	const index = campaignData.sessions.findIndex((row) => row.id === id)
 	const updatedRow = await request.json()
 	if (index === -1) {
 		campaignData.sessions.push(updatedRow)

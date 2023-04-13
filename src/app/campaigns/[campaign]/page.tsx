@@ -1,7 +1,7 @@
 /** @jsxImportSource react */
 import React from 'react'
 
-import { readCampaigns } from './util'
+import { readCampaigns } from '@/campaignDb'
 import CampaignView from '@/app/campaigns/[campaign]/CampaignView'
 
 export default async function CampaignPage({
