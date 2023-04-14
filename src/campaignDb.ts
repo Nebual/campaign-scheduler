@@ -43,7 +43,7 @@ export async function writeCampaigns(campaigns: Campaign[]) {
 			.map((session: Session) => ({
 				...session,
 				campaign: campaign.name, // always save latest name
-				people: campaign.people.map((person: User) => ({
+				people: session.people.map((person: User) => ({
 					id: person.id,
 				})),
 			}))

@@ -10,31 +10,46 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
 	const users = await readUsers()
-	const updatedUser = await request.json()
+	const patchUser = await request.json()
 
-	// todo: don't take over other people's users lol
-	const index = users.findIndex((row) => row.email === updatedUser.email)
+	if (
+		users.find(
+			(row) =>
+				row.id === patchUser.id &&
+				row.email &&
+				row.email !== patchUser.email
+		)
+	) {
+		return NextResponse.json(
+			{ message: 'ID already in use' },
+			{ status: 409 }
+		)
+	}
+	let updatedUser
+
+	const index = users.findIndex((row) => row.email === patchUser.email)
 	if (index !== -1) {
-		users[index] = {
+		users[index] = updatedUser = {
 			...users[index],
-			...updatedUser,
+			...patchUser,
 		}
 	} else {
-		const indexById = users.findIndex((row) => row.id === updatedUser.id)
+		const indexById = users.findIndex((row) => row.id === patchUser.id)
 		if (indexById !== -1) {
-			users[indexById] = {
+			users[indexById] = updatedUser = {
 				...users[indexById],
-				...updatedUser,
+				...patchUser,
 			}
 		} else {
-			if (!updatedUser.id && updatedUser.email) {
-				updatedUser.id = updatedUser.email.split('@')[0]
+			if (!patchUser.id && patchUser.email) {
+				patchUser.id = patchUser.email.split('@')[0]
 			}
-			users.push(updatedUser)
+			updatedUser = patchUser
+			users.push(patchUser)
 		}
 	}
 	await writeUsers(users)
-	return NextResponse.json({ status: 'OK' })
+	return NextResponse.json(updatedUser)
 }
 
 export async function readUsers(): Promise<User[]> {

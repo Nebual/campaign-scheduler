@@ -16,3 +16,10 @@ export type User = {
 	email?: string
 	avatar?: string
 }
+
+export type LoginToken = {
+	idToken: string
+	expiresAt: number
+	id: string
+	email: string
+}

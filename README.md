@@ -13,8 +13,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Todo
 
-- add User page (when logged in)
-  - allow setting username (enforce unique)
 - auto add current user to new campaigns
 - add user filters to Campaigns list
 - add Google Calendar integration setup

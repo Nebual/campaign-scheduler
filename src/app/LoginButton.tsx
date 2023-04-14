@@ -9,13 +9,15 @@ import {
 } from '@react-oauth/google'
 import { useLocalStorage } from '@rehooks/local-storage'
 import Grid from '@mui/material/Grid'
-import { Button } from '@mui/material'
+import { Button, IconButton, Link } from '@mui/material'
+import UserIcon from '@mui/icons-material/AccountCircle'
+import { LoginToken } from '@/types'
 
 export function tokenIsValid(loginToken: LoginToken | null): boolean {
 	if (!loginToken) {
 		return false
 	}
-	return loginToken.expires_at >= Date.now() / 1000
+	return loginToken.expiresAt >= Date.now() / 1000
 }
 function parseJwt(token: string) {
 	const base64Url = token.split('.')[1]
@@ -31,11 +33,6 @@ function parseJwt(token: string) {
 	)
 
 	return JSON.parse(jsonPayload)
-}
-
-type LoginToken = {
-	id_token: string
-	expires_at: number
 }
 
 const oAuthClientId =
@@ -66,36 +63,57 @@ function LoginButton() {
 								response,
 								credential
 							)
-							setLoginToken({
-								id_token: response.credential,
-								expires_at: credential.exp,
-							})
-							await fetch('/api/users', {
+							const res = await fetch('/api/users', {
 								method: 'PUT',
 								body: JSON.stringify({
 									avatar: credential.picture,
 									email: credential.email,
+									lastLogin: new Date().toISOString(),
 								}),
+							})
+							const responseData = await res.json()
+
+							setLoginToken({
+								idToken: response.credential,
+								expiresAt: credential.exp,
+								id: responseData.id,
+								email: credential.email,
 							})
 						}}
 					/>
 				) : (
-					<Button
-						color="inherit"
-						onClick={() => {
-							googleLogout()
-							delLoginToken()
-						}}
-					>
-						Logout
-					</Button>
+					<Link href="/profile" color="#fff">
+						<IconButton color="inherit">
+							<UserIcon />
+						</IconButton>
+					</Link>
 				)}
 			</Grid>
 		</GoogleOAuthProvider>
 	)
 }
 
+function LogoutButtonComponent() {
+	const [loginToken, _, delLoginToken] =
+		useLocalStorage<LoginToken>('googleLogin')
+	return (
+		<Button
+			color="inherit"
+			disabled={!loginToken}
+			onClick={() => {
+				googleLogout()
+				delLoginToken()
+			}}
+		>
+			Logout
+		</Button>
+	)
+}
+
 // SSR seems to hate this (errors on hydrate), so lets disable SSR
 export default dynamic(async () => LoginButton, {
+	ssr: false,
+})
+export const LogoutButton = dynamic(async () => LogoutButtonComponent, {
 	ssr: false,
 })
