@@ -14,7 +14,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Todo
 
 - auto add current user to new campaigns
-- add user filters to Campaigns list
 - add Google Calendar integration setup
   - show aggregated availability of all users in session
 - allow users to RSVP in a session

@@ -5,6 +5,7 @@ export async function PUT(
 	request: NextRequest,
 	{ params: { campaign, id } }: { params: { campaign: string; id: string } }
 ) {
+	campaign = decodeURI(campaign)
 	const campaigns = await readCampaigns()
 	const campaignData = campaigns.find((row) => row.name === campaign)
 	if (!campaignData) {

@@ -33,6 +33,25 @@ export async function readCampaigns(): Promise<Campaign[]> {
 	}))
 }
 
+export async function readCampaign(
+	campaign: string
+): Promise<Campaign | undefined> {
+	const campaigns = await readCampaigns()
+	campaign = decodeURI(campaign)
+	return campaigns.find((row: Campaign) => row.name === campaign)
+}
+export async function readCampaignWithDefault(
+	campaign: string
+): Promise<Campaign> {
+	return (
+		(await readCampaign(campaign)) || {
+			name: 'New Campaign',
+			people: [],
+			sessions: [],
+		}
+	)
+}
+
 // todo: this is a hilariously bad 'database'
 export async function writeCampaigns(campaigns: Campaign[]) {
 	await mkdir('./data', { recursive: true })

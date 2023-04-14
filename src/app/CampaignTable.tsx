@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useState } from 'react'
 import {
+	Autocomplete,
 	Box,
 	Breadcrumbs,
 	Button,
@@ -14,6 +15,7 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	TextField,
 	Tooltip,
 	Typography,
 } from '@mui/material'
@@ -22,12 +24,23 @@ import { Campaign } from '@/types'
 import { useRefreshOnSoftNav } from '@/hooks'
 import { dateStringFormat } from '@/util'
 
+type PeopleFilterOption = {
+	id: string
+}
+
 type CampaignTableProps = {
 	rows: Campaign[]
 }
 
 export default function CampaignTable({ rows }: CampaignTableProps) {
 	useRefreshOnSoftNav('/')
+	const [filterPeople, setFilterPeople] = useState<PeopleFilterOption[]>([])
+	const peopleOptions: PeopleFilterOption[] = Object.values(
+		rows
+			.map(({ people }) => people)
+			.flat()
+			.reduce((acc, obj) => ({ ...acc, [obj.id]: obj }), {})
+	)
 
 	return (
 		<Container maxWidth="lg">
@@ -67,15 +80,63 @@ export default function CampaignTable({ rows }: CampaignTableProps) {
 						<TableHead>
 							<TableRow>
 								<TableCell>Name</TableCell>
-								<TableCell>People</TableCell>
+								<TableCell sx={{ py: 1.5 }}>
+									<Box
+										sx={{
+											display: 'flex',
+											alignItems: 'center',
+										}}
+									>
+										<span>People</span>
+										<Autocomplete
+											sx={{
+												ml: 2,
+												minWidth: 300,
+												'& .MuiInputBase-root': {
+													minHeight: '4.5ch',
+												},
+											}}
+											value={filterPeople}
+											onChange={(
+												event: any,
+												newValues: PeopleFilterOption[]
+											) => {
+												setFilterPeople(newValues)
+											}}
+											options={peopleOptions}
+											getOptionLabel={(
+												option: PeopleFilterOption
+											) => option.id}
+											multiple
+											disableCloseOnSelect
+											clearOnEscape
+											renderInput={(params) => (
+												<TextField
+													{...params}
+													placeholder="   filter by people"
+													variant="standard"
+												/>
+											)}
+										/>
+									</Box>
+								</TableCell>
 								<TableCell>Last Session</TableCell>
 								<TableCell>{/*Actions*/}</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rows.map((row) => (
-								<CampaignRow key={row.name} row={row} />
-							))}
+							{rows
+								.filter((row) => {
+									const people = row.people.map(
+										({ id }) => id
+									)
+									return filterPeople.every(({ id }) =>
+										people.includes(id)
+									)
+								})
+								.map((row) => (
+									<CampaignRow key={row.name} row={row} />
+								))}
 						</TableBody>
 					</Table>
 				</TableContainer>

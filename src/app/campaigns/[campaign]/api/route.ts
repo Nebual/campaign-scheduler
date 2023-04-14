@@ -5,6 +5,7 @@ export async function PUT(
 	request: NextRequest,
 	{ params: { campaign } }: { params: { campaign: string } }
 ) {
+	campaign = decodeURI(campaign)
 	const rows = await readCampaigns()
 	const index = rows.findIndex((row) => row.name === campaign)
 	const updatedRow = await request.json()

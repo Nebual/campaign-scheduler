@@ -2,7 +2,7 @@
 import React from 'react'
 import dayjs from 'dayjs'
 
-import { readCampaigns } from '@/campaignDb'
+import { readCampaignWithDefault } from '@/campaignDb'
 import SessionView from './SessionView'
 import { generateSlug } from 'random-word-slugs'
 
@@ -11,12 +11,8 @@ export default async function SessionPage({
 }: {
 	params: { campaign: string; id: string }
 }) {
-	const campaigns = await readCampaigns()
-	const campaignData = campaigns.find((row) => row.name === campaign) || {
-		name: 'New Campaign',
-		people: [],
-		sessions: [],
-	}
+	const campaignData = await readCampaignWithDefault(campaign)
+
 	const sessionData = campaignData.sessions.find((row) => row.id === id) || {
 		id: generateSlug(),
 		campaign: campaignData.name,
