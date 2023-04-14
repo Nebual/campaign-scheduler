@@ -4,10 +4,12 @@ import React, { useEffect } from 'react'
 import { useLocalStorage } from '@rehooks/local-storage'
 import { LoginToken } from '@/types'
 import {
+	Avatar,
 	Box,
 	Breadcrumbs,
 	Button,
 	Container,
+	InputAdornment,
 	TextField,
 	Tooltip,
 	Typography,
@@ -43,6 +45,13 @@ function ProfileView() {
 					label="Email"
 					value={loginToken?.email || ''}
 					InputLabelProps={{ shrink: true }}
+					InputProps={{
+						endAdornment: loginToken?.avatar ? (
+							<InputAdornment position="end">
+								<Avatar src={loginToken?.avatar} />
+							</InputAdornment>
+						) : undefined,
+					}}
 					disabled
 				/>
 			</Tooltip>

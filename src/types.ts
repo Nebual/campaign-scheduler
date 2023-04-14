@@ -22,4 +22,5 @@ export type LoginToken = {
 	expiresAt: number
 	id: string
 	email: string
+	avatar: string
 }

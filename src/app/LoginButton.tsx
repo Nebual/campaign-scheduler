@@ -78,6 +78,7 @@ function LoginButton() {
 								expiresAt: credential.exp,
 								id: responseData.id,
 								email: credential.email,
+								avatar: credential.picture,
 							})
 						}}
 					/>
