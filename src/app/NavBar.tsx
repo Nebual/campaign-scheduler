@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import LoginButton from './LoginButton'
+import { LoginOrProfileButton } from './LoginButton'
 
 export default function NavBar() {
 	return (
@@ -35,7 +35,7 @@ export default function NavBar() {
 							<span>GPlanMan</span>
 						</Tooltip>
 					</Typography>
-					<LoginButton />
+					<LoginOrProfileButton />
 				</Toolbar>
 			</AppBar>
 		</Box>
