@@ -30,6 +30,7 @@ function LoginButton() {
 
 	const login = useGoogleLogin({
 		flow: 'auth-code',
+		scope: 'email https://www.googleapis.com/auth/calendar.readonly',
 		hint: loginToken?.email,
 		onSuccess: async (codeResponse) => {
 			const response = await fetch('/api/auth/google/', {

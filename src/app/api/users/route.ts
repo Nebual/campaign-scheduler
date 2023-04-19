@@ -13,11 +13,10 @@ export async function PUT(request: Request) {
 	const patchUser = await request.json()
 
 	if (
+		patchUser.id &&
+		patchUser.email &&
 		users.find(
-			(row) =>
-				row.id === patchUser.id &&
-				row.email &&
-				row.email !== patchUser.email
+			(row) => row.id === patchUser.id && row.email !== patchUser.email
 		)
 	) {
 		return NextResponse.json(

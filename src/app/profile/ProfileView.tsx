@@ -15,6 +15,7 @@ import {
 	Typography,
 } from '@mui/material'
 import Garbage from './Garbage'
+import CalendarSelection from './CalendarSelection'
 import LoginButton, { LogoutButton } from '@/app/LoginButton'
 import dynamic from 'next/dynamic'
 
@@ -122,6 +123,7 @@ function ProfileView() {
 			<Container maxWidth="sm">
 				{loginToken ? contents : <LoginButton />}
 			</Container>
+			<CalendarSelection />
 		</Container>
 	)
 }
