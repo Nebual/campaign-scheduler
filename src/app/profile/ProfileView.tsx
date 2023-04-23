@@ -123,7 +123,7 @@ function ProfileView() {
 			<Container maxWidth="sm">
 				{loginToken ? contents : <LoginButton />}
 			</Container>
-			<CalendarSelection />
+			{!!loginToken && <CalendarSelection />}
 		</Container>
 	)
 }

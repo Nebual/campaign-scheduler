@@ -17,6 +17,7 @@ import type { Session } from '@/types'
 import DateTimePicker from '@/DateTimePicker'
 import { dateStringFormat } from '@/util'
 import UserChip from '@/UserChip'
+import SessionCalendar from '@/app/campaigns/[campaign]/sessions/[id]/SessionCalendar'
 
 type SessionViewProps = {
 	session: Session
@@ -130,6 +131,7 @@ export default function SessionView({
 						/>
 					</CardContent>
 				</Card>
+				<SessionCalendar people={session.people} />
 			</Box>
 		</Container>
 	)

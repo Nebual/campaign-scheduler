@@ -15,6 +15,7 @@ export type User = {
 	id: string
 	email?: string
 	avatar?: string
+	enabledCalendars?: string[]
 }
 
 export type LoginToken = {
