@@ -26,6 +26,7 @@ export async function GET(
 		freeBusyCalendars,
 		enabledCalendars: user.enabledCalendars,
 		name: user.id,
+		combineAcrossCalendars: true,
 	})
 
 	return NextResponse.json({ events: events })
