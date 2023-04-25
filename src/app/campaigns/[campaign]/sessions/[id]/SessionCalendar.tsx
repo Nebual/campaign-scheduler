@@ -11,6 +11,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import useSWR from 'swr'
 import distinctColors from 'distinct-colors'
 
+import './Calendar.scss'
+
 type SessionCalendarProps = {
 	people: User[]
 }
@@ -38,10 +40,15 @@ export default function SessionCalendar({ people }: SessionCalendarProps) {
 				plugins={[dayJsPlugin, timeGridPlugin]}
 				initialView="timeGridWeek"
 				events={data?.flatMap((d, i: number) => {
+					const backgroundColor = colours[i]
 					return (
 						d.events?.map((e: any) => ({
 							...e,
-							backgroundColor: colours[i],
+							backgroundColor,
+							textColor:
+								backgroundColor.luminance() > 0.5
+									? 'black'
+									: 'white',
 						})) || []
 					)
 				})}

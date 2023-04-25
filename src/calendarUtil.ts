@@ -3,12 +3,14 @@ import dayjs from 'dayjs'
 export function busyResponseToEvents({
 	freeBusyCalendars,
 	enabledCalendars,
+	invertedCalendars,
 	name,
 	formatFn,
 	combineAcrossCalendars = false,
 }: {
 	freeBusyCalendars: any
 	enabledCalendars: string[]
+	invertedCalendars: string[]
 	name?: string
 	formatFn?: (busy: any, key: string) => any
 	combineAcrossCalendars?: boolean
@@ -17,7 +19,7 @@ export function busyResponseToEvents({
 		.filter((key) => enabledCalendars.includes(key))
 		.flatMap((key, i) => {
 			let previousEvent: any = null
-			return freeBusyCalendars[key].busy
+			const formattedEvents = freeBusyCalendars[key].busy
 				.map((calEvent: any) => {
 					if (
 						previousEvent &&
@@ -34,12 +36,40 @@ export function busyResponseToEvents({
 						title: name,
 						start: calEvent.start,
 						end: calEvent.end,
-						textColor: 'black',
 						...(formatFn ? formatFn(calEvent, key) : {}),
 					}
 					return previousEvent
 				})
 				.filter(Boolean)
+
+			if (invertedCalendars.includes(key)) {
+				const invertedEvents = []
+				let start = dayjs().startOf('day')
+				formattedEvents.forEach((event: any) => {
+					if (start.isBefore(event.start)) {
+						invertedEvents.push({
+							...event,
+							start: start.toISOString(),
+							end: event.start,
+						})
+					}
+					start = dayjs(event.end)
+				})
+
+				invertedEvents.push({
+					...(formattedEvents.length > 0
+						? formattedEvents[0]
+						: {
+								title: name,
+								...(formatFn ? formatFn({}, key) : {}),
+						  }),
+					start: start.toISOString(),
+					end: dayjs().startOf('day').add(1, 'month').toISOString(),
+				})
+				return invertedEvents
+			}
+
+			return formattedEvents
 		})
 	if (combineAcrossCalendars) {
 		let previousEvent: any = null

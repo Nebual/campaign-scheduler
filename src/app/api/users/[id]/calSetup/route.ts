@@ -57,5 +57,10 @@ export async function GET(
 		.then((res) => res.json())
 		.then((res) => res?.calendars || {})
 
-	return NextResponse.json({ calendars, freeBusyCalendars })
+	return NextResponse.json({
+		calendars,
+		freeBusyCalendars,
+		enabledCalendars: user.enabledCalendars,
+		invertedCalendars: user.invertedCalendars,
+	})
 }

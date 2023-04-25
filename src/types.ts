@@ -16,6 +16,7 @@ export type User = {
 	email?: string
 	avatar?: string
 	enabledCalendars?: string[]
+	invertedCalendars?: string[]
 }
 
 export type LoginToken = {

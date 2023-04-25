@@ -25,6 +25,7 @@ export async function GET(
 	const events = busyResponseToEvents({
 		freeBusyCalendars,
 		enabledCalendars: user.enabledCalendars,
+		invertedCalendars: user.invertedCalendars || [],
 		name: user.id,
 		combineAcrossCalendars: true,
 	})
@@ -42,7 +43,7 @@ const fetchFreeBusyCalendars = async (
 		return calCache.get(cacheKey)
 	}
 
-	const timeMin = dayjs().set('second', 0).set('minute', 0)
+	const timeMin = dayjs().startOf('day')
 	const results = await fetch(
 		'https://www.googleapis.com/calendar/v3/freeBusy',
 		{
