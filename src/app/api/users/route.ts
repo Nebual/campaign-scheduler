@@ -16,7 +16,9 @@ export async function PUT(request: Request) {
 		patchUser.id &&
 		patchUser.email &&
 		users.find(
-			(row) => row.id === patchUser.id && row.email !== patchUser.email
+			(row) =>
+				row.id.toLowerCase() === patchUser.id.toLowerCase() &&
+				row.email !== patchUser.email
 		)
 	) {
 		return NextResponse.json(
@@ -33,7 +35,9 @@ export async function PUT(request: Request) {
 			...patchUser,
 		}
 	} else {
-		const indexById = users.findIndex((row) => row.id === patchUser.id)
+		const indexById = users.findIndex(
+			(row) => row.id.toLowerCase() === patchUser.id.toLowerCase()
+		)
 		if (indexById !== -1) {
 			users[indexById] = updatedUser = {
 				...users[indexById],

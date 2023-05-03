@@ -13,7 +13,10 @@ export async function readCampaigns(): Promise<Campaign[]> {
 		...campaign,
 		people: campaign.people.map((person: User) => {
 			const knownPerson =
-				knownUsers.find((user: User) => user.id === person.id) || {}
+				knownUsers.find(
+					(user: User) =>
+						user.id?.toLowerCase() === person.id?.toLowerCase()
+				) || {}
 			return {
 				...knownPerson,
 				...person,
@@ -23,7 +26,10 @@ export async function readCampaigns(): Promise<Campaign[]> {
 			...session,
 			people: session.people.map((person: User) => {
 				const knownPerson =
-					knownUsers.find((user: User) => user.id === person.id) || {}
+					knownUsers.find(
+						(user: User) =>
+							user.id?.toLowerCase() === person.id?.toLowerCase()
+					) || {}
 				return {
 					...knownPerson,
 					...person,

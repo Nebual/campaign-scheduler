@@ -101,7 +101,9 @@ export default function SessionView({
 										setSession((session) => ({
 											...session,
 											people: session.people.filter(
-												(p) => p.id !== user.id
+												(p) =>
+													p.id.toLowerCase() !==
+													user.id.toLowerCase()
 											),
 										}))
 									}}
@@ -115,10 +117,18 @@ export default function SessionView({
 							onKeyDown={(e) => {
 								const id = (e.target as HTMLInputElement).value
 								if (e.key === 'Enter') {
-									setSession((session) => ({
-										...session,
-										people: [...session.people, { id }],
-									}))
+									if (
+										!session.people.some(
+											(user) =>
+												user.id.toLowerCase() ===
+												id.toLowerCase()
+										)
+									) {
+										setSession((session) => ({
+											...session,
+											people: [...session.people, { id }],
+										}))
+									}
 									;(e.target as HTMLInputElement).value = ''
 								}
 							}}

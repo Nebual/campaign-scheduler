@@ -30,7 +30,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - invent friends (initially just, people you share a game with)
   - filters campaign list + "friends" calendar
   - autofills names when adding to a session
-- make usernames case insensitive (always lowercase except when displaying?)
 - allow users to RSVP in a session
 - poll creation: choice of times
 - poll creation: choice of campaigns ("what should we play?")
@@ -40,3 +39,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] auto add current user to new campaigns
 - [x] fix: auto save campaign name on blur, rather than clear (better for mobile)
 - [x] Adding names to a Campaign sometimes adds an empty one
+- [x] make usernames case insensitive (always lowercase except when displaying?)

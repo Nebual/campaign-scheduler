@@ -125,7 +125,9 @@ export default function CampaignView({
 										setCampaign((campaign) => ({
 											...campaign,
 											people: campaign.people.filter(
-												(p) => p.id !== user.id
+												(p) =>
+													p.id.toLowerCase() !==
+													user.id.toLowerCase()
 											),
 										}))
 									}}

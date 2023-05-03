@@ -8,9 +8,10 @@ export async function GET(
 	request: Request,
 	{ params: { id } }: { params: { id: string } }
 ) {
+	id = id.toLowerCase()
 	// todo: apply auth, maybe store access tokens associated with a user (which expire after 30d, instead of 1h as Google's do) in sessions.json (or node-cache to disk?) or a db lol
 	const users = await readUsers()
-	const user = users.find((user) => user.id === id)
+	const user = users.find((user) => user.id.toLowerCase() === id)
 	if (!user?.email) {
 		return NextResponse.json({ message: 'ID not found' }, { status: 404 })
 	}

@@ -10,8 +10,9 @@ export async function GET(
 	request: Request,
 	{ params: { id } }: { params: { id: string } }
 ) {
+	id = id.toLowerCase()
 	const users = await readUsers()
-	const user = users.find((user) => user.id === id)
+	const user = users.find((user) => user.id.toLowerCase() === id)
 	if (!user?.email || !user.enabledCalendars) {
 		return NextResponse.json({ message: 'ID not found' }, { status: 404 })
 	}
