@@ -37,6 +37,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - mark campaign as "done" (sorts to bottom? greys out?)
 
 ### Smaller Todos/Fixes
-- auto add current user to new campaigns
-- fix: auto save campaign name on blur, rather than clear (better for mobile)
-- Adding names to a Campaign sometimes adds an empty one
+- [x] auto add current user to new campaigns
+- [x] fix: auto save campaign name on blur, rather than clear (better for mobile)
+- [x] Adding names to a Campaign sometimes adds an empty one

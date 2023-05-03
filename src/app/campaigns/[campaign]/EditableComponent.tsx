@@ -22,7 +22,12 @@ export default function EditableComponent({
 		<TextField
 			defaultValue={value !== 'New Campaign' ? value : ''}
 			autoFocus
-			onBlur={() => setEditing(false)}
+			onBlur={(e) => {
+				if (e.target.value) {
+					setValue(e.target.value)
+				}
+				setEditing(false)
+			}}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter') {
 					setValue((e.target as HTMLInputElement).value)

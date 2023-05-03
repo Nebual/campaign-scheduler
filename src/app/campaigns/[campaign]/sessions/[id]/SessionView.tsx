@@ -113,17 +113,11 @@ export default function SessionView({
 							variant="standard"
 							sx={{ mt: 2 }}
 							onKeyDown={(e) => {
+								const id = (e.target as HTMLInputElement).value
 								if (e.key === 'Enter') {
 									setSession((session) => ({
 										...session,
-										people: [
-											...session.people,
-											{
-												id: (
-													e.target as HTMLInputElement
-												).value,
-											},
-										],
+										people: [...session.people, { id }],
 									}))
 									;(e.target as HTMLInputElement).value = ''
 								}

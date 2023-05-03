@@ -27,6 +27,8 @@ import type { Campaign, Session } from '@/types'
 import { useRefreshOnSoftNav } from '@/hooks'
 import { dateStringFormat } from '@/util'
 import UserChip from '@/UserChip'
+import { useLocalStorage } from '@rehooks/local-storage'
+import { LoginToken } from '@/types'
 
 type CampaignViewProps = {
 	campaign: Campaign
@@ -35,9 +37,16 @@ type CampaignViewProps = {
 export default function CampaignView({
 	campaign: campaignOriginal,
 }: CampaignViewProps) {
+	const [loginToken] = useLocalStorage<LoginToken>('googleLogin')
 	const router = useRouter()
-	const [campaignSaved, setCampaignSaved] = useState(campaignOriginal)
-	const [campaign, setCampaign] = useState(campaignOriginal)
+	const [campaignSaved, setCampaignSaved] = useState(() => ({
+		...campaignOriginal,
+		people:
+			campaignOriginal.people.length === 0 && loginToken?.id
+				? [{ id: loginToken?.id }]
+				: campaignOriginal.people,
+	}))
+	const [campaign, setCampaign] = useState(campaignSaved)
 	useRefreshOnSoftNav(`/campaigns/${campaign.name}`)
 
 	// auto save any changes
@@ -128,17 +137,11 @@ export default function CampaignView({
 							variant="standard"
 							sx={{ mt: 2 }}
 							onKeyDown={(e) => {
+								const id = (e.target as HTMLInputElement).value
 								if (e.key === 'Enter') {
 									setCampaign((campaign) => ({
 										...campaign,
-										people: [
-											...campaign.people,
-											{
-												id: (
-													e.target as HTMLInputElement
-												).value,
-											},
-										],
+										people: [...campaign.people, { id }],
 									}))
 									;(e.target as HTMLInputElement).value = ''
 								}

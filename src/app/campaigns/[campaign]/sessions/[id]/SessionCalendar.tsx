@@ -19,10 +19,9 @@ type SessionCalendarProps = {
 
 async function fetchAll([_, peopleIds]: [string, string[]]) {
 	return Promise.all(
-		peopleIds.map((userId: string) => {
-			console.log('got', userId)
-			return fetch(`/api/users/${userId}/cal`).then((res) => res.json())
-		})
+		peopleIds.map((userId: string) =>
+			fetch(`/api/users/${userId}/cal`).then((res) => res.json())
+		)
 	)
 }
 
