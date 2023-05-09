@@ -237,7 +237,7 @@ export default function Garbage() {
 				<FormHelperText>
 					Please allow 4-6 weeks for delivery - note that one shipped,
 					the product cannot be cancelled and will not stop until it
-					arrives. From our problem, to yours!
+					arrives, without exception. From our problem, to yours!
 				</FormHelperText>
 			</Collapse>
 		</>

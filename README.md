@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - [x] calendars: support whitelist vs blacklist (eg. a calendar with events indicating blocks when you're ready)
 - sessions have duration
   - defaults to previous session of this campaign's, or 3 hours
-- view "friends" calendar (outside of a session, linked from main page)
+- [x] view "friends" calendar (outside of a session, linked from main page)
   - with filters
   - can only see session title if you're a member (otherwise its just busy)
     - which then links to the session page

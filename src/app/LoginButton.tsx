@@ -103,7 +103,7 @@ function LoginButtonWrapper() {
 function LoginOrProfileButtonComponent() {
 	const [loginToken] = useLocalStorage<LoginToken>('googleLogin')
 	return (
-		<Grid item>
+		<Grid item sx={{ ml: 'auto' }}>
 			{!loginToken?.email ? (
 				<LoginButtonWrapper />
 			) : (

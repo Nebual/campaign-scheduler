@@ -14,7 +14,7 @@ import distinctColors from 'distinct-colors'
 import './Calendar.scss'
 
 type SessionCalendarProps = {
-	people: User[]
+	people: Pick<User, 'id'>[]
 }
 
 async function fetchAll([_, peopleIds]: [string, string[]]) {
@@ -51,6 +51,7 @@ export default function SessionCalendar({ people }: SessionCalendarProps) {
 						})) || []
 					)
 				})}
+				height="calc(min(800px, 100vh - 92px))"
 			/>
 		</Box>
 	)

@@ -11,6 +11,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 
 import { LoginOrProfileButton } from './LoginButton'
+import CalendarButton from '@/app/CalendarButton'
 
 export default function NavBar() {
 	return (
@@ -22,19 +23,17 @@ export default function NavBar() {
 						edge="start"
 						color="inherit"
 						aria-label="menu"
-						sx={{ mr: 2, opacity: 0 }}
+						sx={{ mr: 2, display: 'none' }}
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography
-						variant="h6"
-						component="div"
-						sx={{ flexGrow: 1 }}
-					>
+					<Typography variant="h6" component="div">
 						<Tooltip title="Game Planning Manager: Gmanman's cooler brother">
 							<span>GPlanMan</span>
 						</Tooltip>
 					</Typography>
+					<Typography sx={{ ml: 2.75, mr: 2 }}>|</Typography>
+					<CalendarButton />
 					<LoginOrProfileButton />
 				</Toolbar>
 			</AppBar>
