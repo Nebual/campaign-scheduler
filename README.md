@@ -24,8 +24,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - sessions have duration
   - defaults to previous session of this campaign's, or 3 hours
 - [x] view "friends" calendar (outside of a session, linked from main page)
-  - with filters
-  - can only see session title if you're a member (otherwise its just busy)
+  - [x] with filters
+  - shows sessions on the calendar
+    - can only see session title if you're a member (otherwise its just busy)
     - which then links to the session page
 - invent friends (initially just, people you share a game with)
   - filters campaign list + "friends" calendar

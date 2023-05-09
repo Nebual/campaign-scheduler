@@ -24,7 +24,7 @@ import { Campaign } from '@/types'
 import { useRefreshOnSoftNav } from '@/hooks'
 import { dateStringFormat } from '@/util'
 
-type PeopleFilterOption = {
+export type PeopleFilterOption = {
 	id: string
 }
 
