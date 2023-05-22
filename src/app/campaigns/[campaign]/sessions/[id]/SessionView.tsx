@@ -137,6 +137,7 @@ export default function SessionView({
 				</Card>
 				<SessionCalendar
 					people={session.people}
+					sessionId={session.id}
 					sessionDate={session.date}
 					setSessionDate={(date: string) =>
 						setSession((session) => ({

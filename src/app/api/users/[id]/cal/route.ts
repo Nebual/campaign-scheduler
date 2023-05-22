@@ -5,6 +5,7 @@ import NodeCache from 'node-cache'
 import { getRefreshedAccessToken } from '@/app/api/auth/google/route'
 import { readUsers } from '@/app/api/users/route'
 import { busyResponseToEvents } from '@/calendarUtil'
+import { readCampaigns } from '@/campaignDb'
 
 export async function GET(
 	request: Request,
@@ -31,7 +32,25 @@ export async function GET(
 		combineAcrossCalendars: true,
 	})
 
-	return NextResponse.json({ events: events })
+	const sessionEvents = (await readCampaigns())
+		.flatMap((campaign) =>
+			campaign.sessions.filter(
+				(session) =>
+					dayjs().isBefore(session.date) &&
+					session.people.some(
+						(person) => person.id.toLowerCase() === id
+					)
+			)
+		)
+		.map((session) => ({
+			title: session.campaign,
+			start: session.date,
+			end: dayjs(session.date).add(3, 'hour').toISOString(),
+			campaignId: session.campaign,
+			sessionId: session.id,
+		}))
+
+	return NextResponse.json({ events: [...events, ...sessionEvents] })
 }
 
 const calCache = new NodeCache({ stdTTL: 120 })

@@ -15,6 +15,7 @@ import dayjs from 'dayjs'
 
 type SessionCalendarProps = {
 	people: Pick<User, 'id'>[]
+	sessionId?: string
 	sessionDate?: string
 	setSessionDate?: (date: string) => void
 }
@@ -29,6 +30,7 @@ async function fetchAll([_, peopleIds]: [string, string[]]) {
 
 export default function SessionCalendar({
 	people,
+	sessionId,
 	sessionDate,
 	setSessionDate,
 }: SessionCalendarProps) {
@@ -39,20 +41,25 @@ export default function SessionCalendar({
 		() => distinctColors({ count: data?.length || 0 }),
 		[data?.length]
 	)
-	const events = data?.flatMap((d, i: number) => {
+	let events = data?.flatMap((d, i: number) => {
 		const backgroundColor = colours[i]
 		return (
 			d.events?.map((e: any) => ({
 				...e,
 				backgroundColor,
+				classNames: e.sessionId ? ['sessionEvent'] : [],
 				textColor:
 					backgroundColor.luminance() > 0.5 ? 'black' : 'white',
+				url: e.sessionId
+					? `/campaigns/${e.campaignId}/sessions/${e.sessionId}`
+					: '',
 			})) || []
 		)
 	})
-	if (sessionDate) {
-		events?.push({
-			title: 'Session',
+	if (sessionDate && events) {
+		events = events.filter((e: any) => e.sessionId !== sessionId)
+		events.push({
+			title: 'This Session',
 			start: sessionDate,
 			end: dayjs(sessionDate).add(3, 'hour').toISOString(),
 			backgroundColor: 'rgba(0, 100, 0, 0.3)',

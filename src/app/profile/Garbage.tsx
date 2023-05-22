@@ -235,9 +235,10 @@ export default function Garbage() {
 			/>
 			<Collapse in={!!garbage.iOS}>
 				<FormHelperText>
-					Please allow 4-6 weeks for delivery - note that one shipped,
-					the product cannot be cancelled and will not stop until it
-					arrives, without exception. From our problem, to yours!
+					Please allow 4-6 weeks for delivery - note that once
+					shipped, the product cannot be cancelled and will not stop
+					until it arrives, without exception. From our problem, to
+					yours!
 				</FormHelperText>
 			</Collapse>
 		</>
