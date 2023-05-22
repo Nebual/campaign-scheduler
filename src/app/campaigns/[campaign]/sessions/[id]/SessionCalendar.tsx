@@ -1,20 +1,22 @@
-'use client'
-
 import React, { useMemo } from 'react'
 
 import { Box } from '@mui/material'
 
 import type { User } from '@/types'
 import FullCalendar from '@fullcalendar/react'
+import interactionPlugin from '@fullcalendar/interaction'
 import dayJsPlugin from 'fullcalendar-plugin-dayjs'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import useSWR from 'swr'
 import distinctColors from 'distinct-colors'
 
 import './Calendar.scss'
+import dayjs from 'dayjs'
 
 type SessionCalendarProps = {
 	people: Pick<User, 'id'>[]
+	sessionDate?: string
+	setSessionDate?: (date: string) => void
 }
 
 async function fetchAll([_, peopleIds]: [string, string[]]) {
@@ -25,7 +27,11 @@ async function fetchAll([_, peopleIds]: [string, string[]]) {
 	)
 }
 
-export default function SessionCalendar({ people }: SessionCalendarProps) {
+export default function SessionCalendar({
+	people,
+	sessionDate,
+	setSessionDate,
+}: SessionCalendarProps) {
 	const peopleIds = people.map(({ id }) => id)
 	const { data } = useSWR(['/api/users/[id]/cal', peopleIds], fetchAll)
 
@@ -33,24 +39,37 @@ export default function SessionCalendar({ people }: SessionCalendarProps) {
 		() => distinctColors({ count: data?.length || 0 }),
 		[data?.length]
 	)
+	const events = data?.flatMap((d, i: number) => {
+		const backgroundColor = colours[i]
+		return (
+			d.events?.map((e: any) => ({
+				...e,
+				backgroundColor,
+				textColor:
+					backgroundColor.luminance() > 0.5 ? 'black' : 'white',
+			})) || []
+		)
+	})
+	if (sessionDate) {
+		events?.push({
+			title: 'Session',
+			start: sessionDate,
+			end: dayjs(sessionDate).add(3, 'hour').toISOString(),
+			backgroundColor: 'rgba(0, 100, 0, 0.3)',
+		})
+	}
 	return (
 		<Box>
 			<FullCalendar
-				plugins={[dayJsPlugin, timeGridPlugin]}
+				plugins={[dayJsPlugin, timeGridPlugin, interactionPlugin]}
 				initialView="timeGridWeek"
-				events={data?.flatMap((d, i: number) => {
-					const backgroundColor = colours[i]
-					return (
-						d.events?.map((e: any) => ({
-							...e,
-							backgroundColor,
-							textColor:
-								backgroundColor.luminance() > 0.5
-									? 'black'
-									: 'white',
-						})) || []
-					)
-				})}
+				events={events}
+				dateClick={(info) => {
+					if (!setSessionDate) {
+						return
+					}
+					setSessionDate(info.dateStr)
+				}}
 				height="calc(min(800px, 100vh - 92px))"
 			/>
 		</Box>

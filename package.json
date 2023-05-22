@@ -14,6 +14,7 @@
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.6",
     "@fullcalendar/core": "^6.1.5",
+    "@fullcalendar/interaction": "^6.1.7",
     "@fullcalendar/react": "^6.1.5",
     "@fullcalendar/timegrid": "^6.1.5",
     "@mui/icons-material": "^5.11.16",

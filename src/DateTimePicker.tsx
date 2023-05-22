@@ -1,4 +1,4 @@
-import { KeyboardEvent, useRef } from 'react'
+import { KeyboardEvent, useEffect, useRef } from 'react'
 
 import TextField from '@mui/material/TextField'
 import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -13,6 +13,10 @@ export default function DateTimePicker({
 	setValue: (value: string) => void
 }) {
 	const fieldValueRef = useRef(dayjs(value))
+	useEffect(() => {
+		fieldValueRef.current = dayjs(value)
+	}, [value])
+
 	function onDateAccept() {
 		setValue(
 			fieldValueRef.current

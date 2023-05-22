@@ -135,7 +135,16 @@ export default function SessionView({
 						/>
 					</CardContent>
 				</Card>
-				<SessionCalendar people={session.people} />
+				<SessionCalendar
+					people={session.people}
+					sessionDate={session.date}
+					setSessionDate={(date: string) =>
+						setSession((session) => ({
+							...session,
+							date,
+						}))
+					}
+				/>
 			</Box>
 		</Container>
 	)
